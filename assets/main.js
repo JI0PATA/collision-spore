@@ -3,6 +3,9 @@ const $$ = el => document.querySelectorAll(el);
 
 const ZONE = $('#zone');
 
+const SCREEN_WIDTH = window.innerWidth;
+const SCREEN_HEIGHT = window.innerHeight;
+
 class Base {
     constructor(parent) {
         this.parent = parent;
@@ -14,6 +17,7 @@ class Substance extends Base {
         super(parent);
 
         this.data = {
+            maxSize: 200,
             position: {
                 x: params.position.x,
                 y: params.position.y
@@ -39,6 +43,7 @@ class Piece extends Base {
         super(parent);
 
         this.data = {
+            size: this.parent.data.maxSize,
             position: {
                 x: this.parent.data.position.x,
                 y: this.parent.data.position.y
@@ -64,6 +69,8 @@ class Piece extends Base {
     }
 
     update() {
+        this.checkEdge();
+
         this.data.position.x += this.data.accelerations.x;
         this.data.position.y += this.data.accelerations.y;
 
@@ -73,6 +80,16 @@ class Piece extends Base {
     draw() {
         this.el.style.top = `${this.data.position.y}px`;
         this.el.style.left = `${this.data.position.x}px`;
+    }
+
+    checkEdge() {
+        const halfSize = this.data.size / 2;
+
+        if (this.data.position.x - halfSize <= 0 && this.data.accelerations.x < 0) this.data.accelerations.x *= -1;
+        if (this.data.position.x + halfSize >= SCREEN_WIDTH && this.data.accelerations.x > 0) this.data.accelerations.x *= -1;
+
+        if (this.data.position.y - halfSize <= 0 && this.data.accelerations.y < 0) this.data.accelerations.y *= -1;
+        if (this.data.position.y + halfSize >= SCREEN_HEIGHT && this.data.accelerations.y > 0) this.data.accelerations.y *= -1;
     }
 }
 
