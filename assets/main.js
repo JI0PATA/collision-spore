@@ -23,9 +23,18 @@ class Substance extends Base {
 
         this.data.pieces.push(new Piece(this));
     }
+
+    update() {
+        this.data.pieces.forEach(piece => {
+            piece.update();
+        });
+    }
 }
 
 class Piece extends Base {
+    #MIN_SPEED = 3;
+    #MAX_SPEED = 8;
+
     constructor(parent) {
         super(parent);
 
@@ -34,6 +43,10 @@ class Piece extends Base {
                 x: this.parent.data.position.x,
                 y: this.parent.data.position.y
             },
+            accelerations: {
+                x: Game.random(-1, 0) === 0 ? Game.random(this.#MIN_SPEED, this.#MAX_SPEED) : Game.random(-this.#MAX_SPEED, -this.#MIN_SPEED),
+                y: Game.random(-1, 0) === 0 ? Game.random(this.#MIN_SPEED, this.#MAX_SPEED) : Game.random(-this.#MAX_SPEED, -this.#MIN_SPEED),
+            }
         }
 
         this.createElement();
@@ -49,6 +62,18 @@ class Piece extends Base {
 
         ZONE.appendChild(this.el);
     }
+
+    update() {
+        this.data.position.x += this.data.accelerations.x;
+        this.data.position.y += this.data.accelerations.y;
+
+        this.draw();
+    }
+
+    draw() {
+        this.el.style.top = `${this.data.position.y}px`;
+        this.el.style.left = `${this.data.position.x}px`;
+    }
 }
 
 class Game {
@@ -56,6 +81,15 @@ class Game {
         this.substances = [];
 
         this.bindEvents();
+        this.loop();
+    }
+
+    loop() {
+        this.substances.forEach((substance => {
+            substance.update();
+        }))
+
+        requestAnimationFrame(_ => this.loop());
     }
 
     bindEvents() {
@@ -68,6 +102,10 @@ class Game {
                 }
             }));
         });
+    }
+
+    static random(min, max) {
+        return Math.round(Math.random() * (max - min) + min);
     }
 }
 
