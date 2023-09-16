@@ -1,0 +1,34 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+#board {
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    filter: contrast(10);
+}
+
+#zone {
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    filter: blur(10px);
+}
+
+.spore {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: cyan;
+    position: absolute;
+    transform: translate(-50%, -50%);
+}
