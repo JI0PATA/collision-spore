@@ -26,6 +26,8 @@ class Substance extends Base {
             countPieces: 10
         }
 
+        this.canMove = false;
+
         this.data.pieces.push(new Piece(this));
         this.data.pieces[0].animateCollapse();
     }
@@ -77,6 +79,8 @@ class Piece extends Base {
     }
 
     update() {
+        if (!this.parent.canMove) return;
+
         this.checkEdge();
 
         this.data.position.x += this.data.accelerations.x;
@@ -101,6 +105,8 @@ class Piece extends Base {
     }
 
     animateCollapse() {
+        this.parent.canMove = false;
+
         const maxSize = this.parent.data.maxSize;
         const minSize = this.parent.data.minSize;
 
@@ -113,6 +119,7 @@ class Piece extends Base {
         });
 
         this.animate.onfinish = _ => {
+            this.parent.canMove = true;
             this.parent.splitting();
         }
     }
