@@ -112,7 +112,9 @@ class Piece extends Base {
             delay: 300
         });
 
-        this.animate.onfinish = _ => {}
+        this.animate.onfinish = _ => {
+            this.parent.splitting();
+        }
     }
 }
 
