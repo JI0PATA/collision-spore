@@ -27,8 +27,7 @@ class Substance extends Base {
         }
 
         this.data.pieces.push(new Piece(this));
-
-        this.splitting();
+        this.data.pieces[0].animateCollapse();
     }
 
     update() {
@@ -99,6 +98,21 @@ class Piece extends Base {
 
         if (this.data.position.y - halfSize <= 0 && this.data.accelerations.y < 0) this.data.accelerations.y *= -1;
         if (this.data.position.y + halfSize >= SCREEN_HEIGHT && this.data.accelerations.y > 0) this.data.accelerations.y *= -1;
+    }
+
+    animateCollapse() {
+        const maxSize = this.parent.data.maxSize;
+        const minSize = this.parent.data.minSize;
+
+        this.animate = this.el.animate({
+            width: [`${maxSize}px`, `${minSize}px`],
+            height: [`${maxSize}px`, `${minSize}px`]
+        }, {
+            duration: 300,
+            delay: 300
+        });
+
+        this.animate.onfinish = _ => {}
     }
 }
 
