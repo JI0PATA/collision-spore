@@ -35,8 +35,8 @@ class Substance extends Base {
 }
 
 class Piece extends Base {
-    #MIN_SPEED = 3;
-    #MAX_SPEED = 8;
+    MIN_SPEED = 3;
+    MAX_SPEED = 8;
 
     constructor(parent) {
         super(parent);
@@ -48,8 +48,8 @@ class Piece extends Base {
                 y: this.parent.data.position.y
             },
             accelerations: {
-                x: Game.random(-1, 0) === 0 ? Game.random(this.#MIN_SPEED, this.#MAX_SPEED) : Game.random(-this.#MAX_SPEED, -this.#MIN_SPEED),
-                y: Game.random(-1, 0) === 0 ? Game.random(this.#MIN_SPEED, this.#MAX_SPEED) : Game.random(-this.#MAX_SPEED, -this.#MIN_SPEED),
+                x: Game.random(-1, 0) === 0 ? Game.random(this.MIN_SPEED, this.MAX_SPEED) : Game.random(-this.MAX_SPEED, -this.MIN_SPEED),
+                y: Game.random(-1, 0) === 0 ? Game.random(this.MIN_SPEED, this.MAX_SPEED) : Game.random(-this.MAX_SPEED, -this.MIN_SPEED),
             }
         }
 
