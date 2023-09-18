@@ -17,14 +17,18 @@ class Substance extends Base {
 
         this.data = {
             maxSize: 200,
+            minSize: 60,
             position: {
                 x: params.position.x,
                 y: params.position.y
             },
-            pieces: []
+            pieces: [],
+            countPieces: 10
         }
 
         this.data.pieces.push(new Piece(this));
+
+        this.splitting();
     }
 
     update() {
@@ -32,11 +36,17 @@ class Substance extends Base {
             piece.update();
         });
     }
+
+    splitting() {
+        for (let i = 0; i < this.data.countPieces; i++) {
+            this.data.pieces.push(new Piece(this));
+        }
+    }
 }
 
 class Piece extends Base {
-    MIN_SPEED = 3;
-    MAX_SPEED = 8;
+    MIN_SPEED = 1;
+    MAX_SPEED = 3;
 
     constructor(parent) {
         super(parent);
