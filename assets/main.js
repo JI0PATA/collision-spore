@@ -9,6 +9,11 @@ class Base {
     constructor(parent) {
         this.parent = parent;
     }
+
+    updateSize() {
+        this.el.style.width = `${this.data.size}px`;
+        this.el.style.height = `${this.data.size}px`;
+    }
 }
 
 class Substance extends Base {
@@ -53,7 +58,7 @@ class Piece extends Base {
         super(parent);
 
         this.data = {
-            size: this.parent.data.maxSize,
+            size: this.parent.data.minSize,
             position: {
                 x: this.parent.data.position.x,
                 y: this.parent.data.position.y
@@ -70,8 +75,8 @@ class Piece extends Base {
     createElement() {
         this.el = document.createElement('div');
         this.el.className = 'spore';
-        this.el.style.width = `200px`;
-        this.el.style.height = `200px`;
+        this.el.style.width = `${this.data.size}px`;
+        this.el.style.height = `${this.data.size}px`;
         this.el.style.left = `${this.data.position.x}px`;
         this.el.style.top = `${this.data.position.y}px`;
 
@@ -107,6 +112,9 @@ class Piece extends Base {
     animateCollapse() {
         this.parent.canMove = false;
 
+        this.data.size = this.parent.data.maxSize;
+        this.updateSize();
+
         const maxSize = this.parent.data.maxSize;
         const minSize = this.parent.data.minSize;
 
@@ -119,6 +127,8 @@ class Piece extends Base {
         });
 
         this.animate.onfinish = _ => {
+            this.data.size = this.parent.data.minSize;
+            this.updateSize();
             this.parent.canMove = true;
             this.parent.splitting();
         }
