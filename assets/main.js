@@ -5,6 +5,8 @@ const ZONE = $('#zone');
 const SCREEN_WIDTH = window.innerWidth;
 const SCREEN_HEIGHT = window.innerHeight;
 
+const COLORS = ['red', 'cyan', 'yellow', 'green', 'blue', 'black'];
+
 class Base {
     constructor(parent) {
         this.parent = parent;
@@ -36,7 +38,8 @@ class Substance extends Base {
                 y: params.position.y
             },
             pieces: [],
-            countPieces: 5
+            countPieces: 5,
+            color: COLORS[Game.random(0, COLORS.length - 1)]
         }
 
         this.canMove = false;
@@ -105,6 +108,7 @@ class Piece extends Base {
         this.el.style.height = `${this.data.size}px`;
         this.el.style.left = `${this.data.position.x}px`;
         this.el.style.top = `${this.data.position.y}px`;
+        this.el.style.backgroundColor = this.parent.data.color;
 
         ZONE.appendChild(this.el);
     }
