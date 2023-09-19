@@ -14,6 +14,14 @@ class Base {
         this.el.style.width = `${this.data.size}px`;
         this.el.style.height = `${this.data.size}px`;
     }
+
+    static checkCollision(piece1, piece2) {
+        const a = piece1.r + piece2.r;
+        const x = piece1.x - piece2.x;
+        const y = piece1.y - piece2.y;
+
+        return a > Math.sqrt((x * x) + (y * y));
+    }
 }
 
 class Substance extends Base {
@@ -32,6 +40,7 @@ class Substance extends Base {
         }
 
         this.canMove = false;
+        this.canCheckCollision = false;
 
         this.data.pieces.push(new Piece(this));
         this.data.pieces[0].animateCollapse();
@@ -47,6 +56,11 @@ class Substance extends Base {
         for (let i = 0; i < this.data.countPieces; i++) {
             this.data.pieces.push(new Piece(this));
         }
+    }
+
+    removePieceFromArray(piece) {
+        this.data.pieces.splice(this.data.pieces.indexOf(piece), 1);
+        console.log(this.data.pieces);
     }
 }
 
@@ -92,6 +106,8 @@ class Piece extends Base {
         this.data.position.y += this.data.accelerations.y;
 
         this.draw();
+
+        this.checkCollision();
     }
 
     draw() {
@@ -111,6 +127,7 @@ class Piece extends Base {
 
     animateCollapse() {
         this.parent.canMove = false;
+        this.parent.canCheckCollision = false;
 
         this.data.size = this.parent.data.maxSize;
         this.updateSize();
@@ -131,7 +148,36 @@ class Piece extends Base {
             this.updateSize();
             this.parent.canMove = true;
             this.parent.splitting();
+            setTimeout(_ => {
+                this.parent.canCheckCollision = true;
+            }, 1000);
         }
+    }
+
+    checkCollision() {
+        if (!this.parent.canCheckCollision) return;
+
+        this.parent.data.pieces.forEach((piece) => {
+            // Выходим из цикла, если мы сравниваем один и тот же кружок
+            if (this === piece) return;
+
+            if (Base.checkCollision({
+                r: this.data.size / 2,
+                x: this.data.position.x,
+                y: this.data.position.y
+            }, {
+                r: piece.data.size / 2,
+                x: piece.data.position.x,
+                y: piece.data.position.y
+            })) {
+                this.removeElement();
+            }
+        });
+    }
+
+    removeElement() {
+        this.el.remove();
+        this.parent.removePieceFromArray(this);
     }
 }
 
