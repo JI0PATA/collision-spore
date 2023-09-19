@@ -61,6 +61,18 @@ class Substance extends Base {
 
     removePieceFromArray(piece) {
         this.data.pieces.splice(this.data.pieces.indexOf(piece), 1);
+        this.checkSplitting();
+    }
+
+    checkSplitting() {
+        if (this.data.pieces.length === 1) {
+            const piece = this.data.pieces[0];
+
+            this.data.position.x = piece.data.position.x;
+            this.data.position.y = piece.data.position.y;
+
+            piece.animateCollapse();
+        }
     }
 }
 
