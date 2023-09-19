@@ -36,11 +36,12 @@ class Substance extends Base {
                 y: params.position.y
             },
             pieces: [],
-            countPieces: 10
+            countPieces: 5
         }
 
         this.canMove = false;
         this.canCheckCollision = false;
+        this.difSize = this.data.maxSize - this.data.minSize;
 
         this.data.pieces.push(new Piece(this));
         this.data.pieces[0].animateCollapse();
@@ -60,7 +61,6 @@ class Substance extends Base {
 
     removePieceFromArray(piece) {
         this.data.pieces.splice(this.data.pieces.indexOf(piece), 1);
-        console.log(this.data.pieces);
     }
 }
 
@@ -170,9 +170,16 @@ class Piece extends Base {
                 x: piece.data.position.x,
                 y: piece.data.position.y
             })) {
-                this.removeElement();
+                if (this.data.size > piece.data.size) this.consume(piece);
+                else piece.consume(this);
             }
         });
+    }
+
+    consume(piece) {
+        this.data.size += piece.data.size - this.parent.data.minSize + this.parent.difSize / this.parent.data.countPieces;
+        this.updateSize();
+        piece.removeElement();
     }
 
     removeElement() {

@@ -25,6 +25,7 @@ html, body {
 }
 
 .spore {
+    transition: width .2s, height .2s;
     width: 200px;
     height: 200px;
     border-radius: 50%;
